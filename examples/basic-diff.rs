@@ -1,6 +1,6 @@
 use std::env;
 use std::fs::File;
-use std::io::{self, BufRead, BufReader};
+use std::io::{BufRead, BufReader};
 
 use differential_dataflow::input::Input;
 use differential_dataflow::operators::{CountTotal, Join, Threshold};
@@ -152,14 +152,14 @@ fn main() {
             let rules = common_rules.concat(&rules_only_in_first);
 
             rules
-                .filter(|(_, support, _, risk_ratio)| {
-                    *support > 0.05 && (*risk_ratio > 2.0 || *risk_ratio < 0.5)
+                .filter(|(_, support, _, risk_ratio)| *support > 0.05 && *risk_ratio > 2.0)
+                .map(|(rule, support_a, _, risk_ratio)| {
+                    let out: Vec<String> =
+                        rule.into_iter().map(|x| x.unwrap_or("*".into())).collect();
+                    (out, support_a, risk_ratio)
                 })
-                .inspect(|(x, time, m)| {
-                    println!(
-                        "[risk-ratios] x: {:?} time: {} multiplicity: {}",
-                        x, time, m
-                    )
+                .inspect(|((x, support, risk_ratio), _, _)| {
+                    println!("[rule]: {:?} {:.2}% {:.2}", x, *support * 100.0, risk_ratio)
                 });
             input_handle
         });
