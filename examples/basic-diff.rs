@@ -91,12 +91,25 @@ fn main() {
                 .join(&first_total_count)
                 .map(|(_, ((rule, rule_count), total))| (rule, (rule_count, total)));
 
-            //first_counts.inspect(|(x, time, m)| println!("[first] x: {:?} time: {} multiplicity: {}", x, time, m));
+            first_counts
+                .map(|_| ())
+                .count_total()
+                .map(|(_, x)| x)
+                .inspect(|(x, _, _)| println!("[first num rules] {}", x));
+            //first_rule_counts.inspect(|(x, time, m)| {
+            //    println!("[first] x: {:?} time: {} multiplicity: {}", x, time, m)
+            //});
 
             let second_counts = second_rule_counts
                 .map(|x| ((), x))
                 .join(&second_total_count)
                 .map(|(_, ((rule, rule_count), total))| (rule, (rule_count, total)));
+
+            second_counts
+                .map(|_| ())
+                .count_total()
+                .map(|(_, x)| x)
+                .inspect(|(x, _, _)| println!("[second num rules] {}", x));
 
             //second_counts.inspect(|(x, time, m)| println!("[second] x: {:?} time: {} multiplicity: {}", x, time, m));
 
@@ -194,6 +207,7 @@ fn main() {
                     println!("[input-count]: {}", count);
                 }
             }
+            input.insert(vec!["dummy".to_string(); 5]);
         }
     })
 }
