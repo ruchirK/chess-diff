@@ -28,12 +28,22 @@ fn main() {
         let mut input = worker.dataflow(|scope| {
             let (input_handle, input): (_, Collection<_, Vec<String>, isize>) =
                 scope.new_collection();
+            /*
+                        let first = input.filter(|s| s[0] == "White-Knight-G").map(|mut s| {
+                            s.remove(0);
+                            s
+                        });
+                        let second = input.filter(|s| s[0] == "White-Knight-B").map(|mut s| {
+                            s.remove(0);
+                            s
+                        });
+            */
 
-            let first = input.filter(|s| s[2] == " a1").map(|mut s| {
+            let first = input.filter(|s| s[2] == "e5").map(|mut s| {
                 s.remove(2);
                 s
             });
-            let second = input.filter(|s| s[2] == " e4").map(|mut s| {
+            let second = input.filter(|s| s[2] == "e4").map(|mut s| {
                 s.remove(2);
                 s
             });
@@ -56,7 +66,7 @@ fn main() {
                         }
 
                         if fourth == 1 {
-                            output[2] = Some(x[2].clone());
+                            output[3] = Some(x[3].clone());
                         }
                         output
                     })
@@ -152,7 +162,7 @@ fn main() {
             let rules = common_rules.concat(&rules_only_in_first);
 
             rules
-                .filter(|(_, support, _, risk_ratio)| *support > 0.05 && *risk_ratio > 2.0)
+                .filter(|(_, support, _, risk_ratio)| *support > 0.05 && *risk_ratio > 1.2)
                 .map(|(rule, support_a, _, risk_ratio)| {
                     let out: Vec<String> =
                         rule.into_iter().map(|x| x.unwrap_or("*".into())).collect();
@@ -171,14 +181,17 @@ fn main() {
 
             let reader = BufReader::new(file);
             for line in reader.lines() {
-                let mut l: Vec<String> = line.unwrap().split(',').map(|s| s.to_string()).collect();
-                l.pop();
+                let l: Vec<String> = line.unwrap().split(',').map(|s| s.to_string()).collect();
+
+                if l.len() != 5 {
+                    println!("{:?}", l);
+                }
                 input.insert(l);
                 count = count + 1;
 
                 if count % 10000 == 0 {
                     //input.advance_to(count);
-                    println!("[input-round]: {}", count);
+                    println!("[input-count]: {}", count);
                 }
             }
         }

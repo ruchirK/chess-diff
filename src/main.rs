@@ -375,16 +375,13 @@ impl Visitor for LastPosition {
                             .expect("dest piece expected to exist");
                         assert!(to_piece.role == *capture);
                         assert!(from_piece.color != to_piece.color);
-                        println!(
-                            "{}, captured, {}, {}, {},",
-                            to_piece, to, self.moves, from_piece
-                        );
+                        println!("{},captured,{},{},{}", to_piece, to, self.moves, from_piece);
                     } else {
                         assert!(!self.pieces.contains_key(to));
                     }
 
                     if let Some(promotion) = promotion {
-                        println!("{}, promoted, {}, {}, ,", from_piece, to, self.moves);
+                        println!("{},promoted,{},{},null", from_piece, to, self.moves);
                         let new_piece = FullPiece {
                             color: from_piece.color,
                             role: *promotion,
@@ -424,7 +421,7 @@ impl Visitor for LastPosition {
                     assert!(pawn.color != captured_pawn.color);
                     assert!(!self.pieces.contains_key(to));
                     println!(
-                        "{}, captured, {}, {}, {}",
+                        "{},captured,{},{},{}",
                         captured_pawn, captured_square, self.moves, pawn
                     );
                     self.pieces.insert(*to, pawn);
@@ -449,9 +446,9 @@ impl Visitor for LastPosition {
         };
         for (key, val) in self.pieces.iter() {
             if val.role == Role::King && winner.is_some() && val.color != winner.unwrap() {
-                println!("{}, captured, {}, {}, ,", val, key, self.moves);
+                println!("{},captured,{},{},null", val, key, self.moves);
             } else {
-                println!("{}, survived, {}, {}, ,", val, key, self.moves);
+                println!("{},survived,{},{},null", val, key, self.moves);
             }
         }
     }
