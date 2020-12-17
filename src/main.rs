@@ -31,10 +31,10 @@ impl fmt::Display for FullPiece {
             Role::Rook => "Rook",
         };
 
-        write!(f, "{}-{}", color, role);
+        write!(f, "{}-{}", color, role)?;
 
         if let Some(file) = self.starting_file {
-            write!(f, "-{}", file.char().to_uppercase());
+            write!(f, "-{}", file.char().to_uppercase())?;
         };
 
         Ok(())

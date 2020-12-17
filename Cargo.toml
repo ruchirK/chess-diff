@@ -9,4 +9,6 @@ edition = "2018"
 [dependencies]
 bzip2 = "0.4"
 pgn-reader = { git = "https://github.com/niklasf/rust-pgn-reader" }
+timely = { git = "https://github.com/TimelyDataflow/timely-dataflow" }
+differential-dataflow = { git = "https://github.com/TimelyDataflow/differential-dataflow" }
 shakmaty = "0.16.4"
